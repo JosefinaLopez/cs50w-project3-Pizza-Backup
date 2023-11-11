@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block main %}
+<style>
+    .cover-container {
+        background-image: url("{% static 'img/food/degradado.png' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        padding: 20px;
+        color: white;
+        position: relative;
+        /* Agrega posición relativa para que el ::after esté posicionado con respecto a este elemento */
+    }
+
+    .cover-container::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 20%;
+        /* Ajusta la altura del área negra inferior según tus necesidades */
+        background: linear-gradient(to bottom, transparent, rgba(0, 0, 0));
+        /* Degradado lineal */
+
+    }
+
+</style>
+<div class="cover-container">
+    {% if message %}
+    <div class="alert alert-dark" id='alert' role="alert">
+        {{message}}
+    </div>
+    {% endif %}
+    <div class="container">
+        <h1>Welcome to Pinocchio's Pizza & Subs</h1>
+        <p>We sell award-winning Sicilian-style pizza and mouth-watering steak subs!</p>
+        <a href="#Menu">
+            <button>Menu
+                <div class="star-1">
+                    <img src="{% static '/img/svgs/star1.svg' %}" class="star-1">
+                </div>
+                <div class="star-2">
+                    <img src="{% static '/img/svgs/star2.svg' %}" class="star-2">
+                </div>
+                <div class="star-3">
+                    <img src="{% static '/img/svgs/star3.svg' %}" class="star-3">
+                </div>
+                <div class="star-4">
+                    <img src="{% static '/img/svgs/star4.svg' %}" class="star-4">
+                </div>
+                <div class="star-5">
+                    <img src="{% static '/img/svgs/star5.svg' %}" class="star-5">
+                </div>
+                <div class="star-6">
+                    <img src="{% static '/img/svgs/star6.svg' %}" class="star-6">
+                </div>
+            </button>
+        </a>
+    </div>
+</div>
+<div class="Container-Menu" id='Menu'>
+    <h2 style='text-align: center;'>Menu</h2>
+    <hr>
+    <div class="xd">
+        {%for ct in Category%}
+        <div class="container-ct">
+            <a href="/category/food/{{ct.id}}" class="btcat d-inline-block nounderline">
+                {{ct.name_category}}
+            </a>
+        </div>
+        {%endfor%}
+    </div>
+    <div class="cat">
+
+    </div>
+</div>
+{%endblock%}

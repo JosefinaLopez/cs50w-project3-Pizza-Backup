@@ -1,0 +1,277 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+        <link rel="shortcut icon" href="{% static '/img/food/loto_1_.ico'%}" type="image/x-icon">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Lora&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'style.css' %}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+            integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+            crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+        <title>Pinocchio's Pizza</title>
+    </head>
+
+    <body>
+        <header>
+            <a href="#">
+                <h3>Pinocchio's Pizza & Subs</h3>
+            </a>
+            <nav>
+                {%if username%}
+                <ul>
+                    <input type="hidden" id="userid" value='{{user_id}}'>
+                    <!-- Enlace que muestra el summary -->
+                    <li class="user-dropdown">
+                        <a href="#" data-bs-toggle="dropdown" class="dropdown-toggle">
+                            <i class="bi bi-person-fill"></i> {{username}}
+                        </a>
+                        <ul class="dropdown-menu" style='background-color: black;'>
+
+                            <li><a href="{%url 'logout'%}">Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#Menu">Menu</a></li>
+                    <li><a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal2" id='cart'><i class="bi bi-cart4" id='cant'></i> {{cant}}</a></li>
+                    <li><a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#exampleModal3" id='cart'><i class="bi bi-box-seam-fill"></i> Orders</a></li>
+                </ul>
+            </nav>
+            {%endif%}
+        </header>
+        {%block main%}
+
+
+        {%endblock%}
+        <!-- Modal -->
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel2"><i class="bi bi-cart-fill"></i> Shopping Cart</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <ul class="list-group" id='container'>
+                    
+                </ul>
+
+                </div>
+                <div class="modal-footer" style='display: flex; justify-content: space-between;'>
+                    <div class="info" style='display: flex; gap:15px;'>
+                        <span id='cantidadt'></span>
+                        <span id='totalt'></span>
+                    </div>
+                    <div class="options">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id='cerrado'>Close</button>
+                        <button type="button" class="btn btn-dark" id='order'>Place your Order</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addressModalLabel">Enter Your Address</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style='display: flex; justify-content:center;'>
+                    <form>
+                        <div class="mb-3">
+                            <h4>{{username}}</h4>
+                            <input type="hidden" id='id_user' value="{{user_id}}">
+                            <hr>
+                        </div>
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Address</label>
+                            <input type="text" class="form-control" id="address" required>
+                        </div>
+                        <button type="button" class="btn btn-dark" id="direction">Confirmar Direccion</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel3"><i class="bi bi-box-seam-fill"></i> Orders</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group" id='container'>
+                            {% for order in orders_with_details %}
+                            <li>
+                                <div class="accordion accordion-flush" id="{{order.id}}">
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button style='width:126vh;' class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#flush-collapse-{{order.id}}" aria-expanded="false" aria-controls="flush-collapse-{{order.id}}">
+                                                <div style='display: flex; justify-content:space-between; width:100%'>
+                                                    <div>
+                                                        {% with order_user=order.user %}
+                                                        <h5 id='xd'>Order #ORDER0045{{order.id}} - {{order_user.username}}</h5>
+                                                        <h6>{{order.order_date}}</h6>
+                                                        {% endwith %}
+
+                                                    </div>
+                                                    {%if isadmin%}
+                                                    <input type="hidden" id="isadmin" value='{{isadmin}}'>
+                                                    <div>
+                                                        <input class="form-check-input" type="checkbox" onclick="xd('{{order.id}}')" id="orderxddd-{{order.id}}" style='width: 20px; height:20px;'> 
+                                                        {% with order_user=order.user %}
+                                                        <label class="form-check-label" for="orderxddd" id='label-{{order.id}}'>
+                                                            {{order.status}}
+                                                        </label>
+                                                        {% endwith %}
+
+                                                    </div>
+                                                    {%else%}
+                                                    {% with order_user=order.user %}
+                                                    <h5 style='background-color: coral; color:white; border-radius:30px; padding:10px; margin:10px;'>{{order.status}}</h5>
+                                                    {% endwith %}
+                                                    {%endif%}
+                                                </div>
+                                            </button>
+                                            </h2>
+                                        <div id="flush-collapse-{{order.id}}" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
+                                            <div class="accordion-body">
+                                                {% for item in order.order_details_set.all %}
+                                                <h5><i class="bi bi-house-up-fill"></i> {{item.orders.direccion_de_entrega}}</h5>
+                                                <div class='container'>
+                                                    <ul id='order_food'>
+                                                        <li style='gap:15px;'>
+                                                            <img src="{{item.food.image_food}}" style='height: 100px; width: 100px; border-radius: 60%;'>
+                                                            <div class="product-details-container">
+                                                                <strong>Food:</strong> {{ item.food.name_food }} <br>
+                                                                <strong>Toppings list:</strong> {{ item.list_toppings }} <br>
+                                                                <strong>Quantity:</strong> {{ item.quantity }} <br>
+                                                                <strong>Total Price:</strong> U$ {{ item.total }} <br>
+                                                            </div>
+                                                        </li>
+                                                        <hr>                    
+                                                    </ul>
+                                                </div>
+                                                {%endfor%}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            {%endfor%}
+                        </ul>
+        
+                    </div>
+                    <div class="modal-footer" style='display: flex; justify-content: space-between;'>
+                        <div class="info" style='display: flex; gap:15px;'>
+                            <span id='cantidadt'></span>
+                            <span id='totalt'></span>
+                        </div>
+                        <div class="options">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer id="footer">
+            <hr>
+            <p>&copy; Josefina Lopez 2023</p>
+        </footer>
+<script>
+    function status() {
+        // Realiza la solicitud fetch al servidor
+        fetch('viewscompleted/')
+            .then(response => response.json())
+            .then(data => {
+                data.active.forEach(order => {
+                    if (order.status === "completed") {
+                        let completed = document.getElementById(`orderxddd-${order.id}`);
+                        //completed.checked = true;
+                        completed.disabled = true;
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error en la solicitud fetch:', error);
+            });
+    }
+
+    //!Funcion de los tokens
+        function getCSRFToken() {
+            var name = "csrftoken=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var cookieArray = decodedCookie.split(';');
+            for (var i = 0; i < cookieArray.length; i++) {
+                var cookie = cookieArray[i];
+                while (cookie.charAt(0) == ' ') {
+                    cookie = cookie.substring(1);
+                }
+                if (cookie.indexOf(name) == 0) {
+                    return cookie.substring(name.length, cookie.length);
+                }
+            }
+            return null;
+        }
+    function xd(id) {
+            let completed = document.getElementById(`orderxddd-${id}`);
+            let h5 = document.getElementById("xd");
+            alert(id);
+            console.log(id);
+            if (completed.checked) {
+                fetch('completed/' + id +'/', {
+                    headers: {
+                        'X-CSRFToken': getCSRFToken()  // Incluye el token CSRF en el encabezado
+                    },
+                    body: null  // No necesitas enviar datos adicionales, por lo que puedes enviar null o un cuerpo vacío
+                }).then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                }).then(data => {
+                    // Maneja el objeto JSON devuelto por el servidor
+                    Swal.fire({
+                        title: 'Éxito!',
+                        text: data.message,
+                        icon: 'success',
+                    });
+                }).catch(error => {
+                    console.error('Error en la solicitud fetch:', error);
+                    // Maneja errores de la solicitud fetch
+                });
+            }
+            else {
+                document.getElementById("label-"+id).innerHTML = "pending"
+            }
+        }
+        let admin = document.getElementById("isadmin").value;
+        if (admin) {
+            status();
+        }
+        
+        //status();
+</script>
+<script src="{% static 'js/index.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="sweetalert2.all.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@2.10.2/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+    </body>
+</html>

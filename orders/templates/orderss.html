@@ -1,0 +1,71 @@
+{%extends "base.html"%}
+{%block main%}
+{% load static %}
+{% if message %}
+<div class="alert alert-dark" id='alert'  role="alert">
+    {{message}}
+</div>
+{% endif %}
+    <div class='info-user' style='text-align: center; padding:10px;'>
+        <h2>Detalle de Orden</h2>
+        <div style='display: flex; justify-content:space-between; padding:20px;'>
+            <div>
+                <ul>
+                    <li>
+                        <h4><i class="bi bi-person-fill"></i> {{username}}</h4>
+                    </li>
+                    <li>
+                        <h4><i class="bi bi-house-up-fill"></i> {{dire}}</h4>
+                    </li>
+                </ul>
+            </div>
+            <div>
+                <ul>
+                    <li>
+                        <h4><i class="bi bi-calendar-fill"></i> {{date}}</h4>
+                    </li>
+                    <li>
+                        <h4 style='color: green;'>U$ {{total}}</h4>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+
+        <h3>Products</h3>
+    </div>
+    <div class='container'>
+        <ul id='order_food'>
+                {% for item in cart_items %}
+                <li style='gap:15px;'>
+                    <img src="{{item.image_food}}" style='height: 100px; width: 100px; border-radius: 60%;'>
+                    <div class="product-details-container">
+                        <strong>Food:</strong> {{ item.food__name_food }} <br>
+                        <strong>Toppings list:</strong> {{ item.list_toppings }} <br>
+                        <strong>Quantity:</strong> {{ item.quantity }} <br>
+                        <strong>Total Price:</strong> {{ item.total_price }} <br>
+                    </div>
+                </li>
+                <hr>
+                {% empty %}
+                <li>No hay elementos en el carrito.</li>
+                {% endfor %}
+        
+        </ul>
+    </div>
+    <div style='display: flex; justify-content:center; padding:25px'>
+        <form method="post">
+            {% csrf_token %}
+            <input type='submit' value="Terminar Orden" id='ordersxd' class='btn btn-dark'>
+        </form>
+        <input type='button' value="Index" class='btn btn-dark' onclick='index()'>
+
+    </div>
+    <script src="{% static 'js/orders.js' %}" type="module" ></script>
+    <script>
+        function index()
+        {
+            window.location.href="/"
+        }
+    </script>
+{%endblock%}

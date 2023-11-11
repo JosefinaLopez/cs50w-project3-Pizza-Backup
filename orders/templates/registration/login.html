@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+<style>
+    #video-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+    }
+
+    .container-form {
+        position: relative;
+        z-index: 1;
+        color: white;
+        text-align: center;
+        padding: 50px;
+    }
+
+    #footer {
+        position: relative;
+        z-index: 2;
+    }
+
+</style>
+{% if message %}
+<div class="alert alert-dark" id="alert" role="alert">
+    {{ message }}
+</div>
+{% endif %}
+<video autoplay muted loop id="video-background">
+    <source src="{% static 'img/pizza.mp4' %}" type="video/mp4">
+    Tu navegador no soporta el elemento de video.
+</video>
+
+<div class="container-form">
+    <form method="post" action="{% url 'login' %}">
+        <h1>Log in</h1>
+        <hr>
+        {% csrf_token %}
+        <div class="user">
+            <label for="username"><i class="bi bi-person-heart"></i></label>
+            <input type="text" id="username" name="username" placeholder='Username' required><br><br>
+        </div>
+        <div class="user">
+            <label for="password"><i class="bi bi-lock-fill"></i></label>
+            <input type="password" id="password" name="password" placeholder='Password' required><br><br>
+        </div>
+        <hr>
+        <input type="submit" value="Login">
+        <p>Aun no tenes una cuenta? <a href="/register">Registrate!</a></p>
+    </form>
+   
+</div>
+
+{% endblock %}
